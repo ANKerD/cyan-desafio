@@ -1,0 +1,9 @@
+/node_modules
+/front-dev-main-react/node_modules
+/front-dev-main-react/src/config.copy.js
+/point-list-aws/node_modules
+/point-list-pg/node_modules
+/point-list-pg/config/config.copy.js
+/point-list-router/node_modules
+/point-list-router/cypress_samples
+/point-list-router/config/config.copy.js

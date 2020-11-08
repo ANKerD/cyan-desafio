@@ -1,0 +1,16 @@
+{
+  "name": "point-list-router",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress open"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "cypress": "^5.5.0",
+    "express": "^4.17.1",
+    "jquery-csv": "^1.0.11"
+  }
+}
