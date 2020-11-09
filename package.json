@@ -6,10 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Flavio S. H. Kodama",
   "license": "UNLICENSED",
   "dependencies": {
-    "@aws-sdk/client-s3": "^1.0.0-rc.4",
     "express": "^4.17.1"
   }
 }
