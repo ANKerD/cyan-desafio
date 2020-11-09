@@ -1,0 +1,182 @@
+<!doctype html>
+<html>
+    <body>
+        <div style="background-color:white;color:black;padding:20px;">
+            <h1>
+            Mid-Level Challenge
+            </h1>
+            <h3>
+            Contexto
+            </h3>
+            <h4>
+            O objetivo desse desafio é criar um projeto web que possibilite ao usuário inserir o caminho para um arquivo .CSV (Com latitudes e longitudes) em um bucket na aws, importar esses dados para um banco de dados e visualizar os pontos geográficos em um mapa. Também deverá ser possível o usuário poder consultar o histórico de dados de arquivos importados anteriormente.
+            </h4>
+            <h3>
+            Requisitos
+            </h3>
+            <h4>
+            <ul>
+            <li><input type="checkbox" checked/>&nbsp;O usuário deve poder inserir o caminho para um arquivo CSV em um bucket público em uma caixa de texto ou componente que você julgar melhor.</li>
+            <li><input type="checkbox" checked/>&nbsp;Os arquivos CSV que devem ser lidos deverão possuir duas colunas, Latitude e Longitude.</li>
+            <li><input type="checkbox" checked/>&nbsp;O formato do caminho para o arquivo CSV deverá sempre seguir o padrão "bucket.com/any-folder/file.csv".</li>
+            <li><input type="checkbox" checked/>&nbsp;O sistema deve salvar esses dados na base de dados. O caminho para o bucket deve obrigatóriamente estar vinculado as dados do arquivo na base de dados.</li>
+            <li><input type="checkbox" checked/>&nbsp;O sistema deve exibir os pontos geográficos importados dos arquivos em um mapa (Google Maps, por exemplo).</li>
+            <li><input type="checkbox" checked/>&nbsp;O sistema deve permitir consultar o histórico de dados importados. Ex: Uma combobox com a lista de todos os caminhos dos arquivos, onde quando o usuário clicar, os pontos geográficos aparecem no mapa.</li>
+            <li><input type="checkbox" checked/>&nbsp;O sistema deve possuir uma interface simples, mas com uma boa experiência de uso para o usuário.</li>
+            <li><input type="checkbox" checked/>&nbsp;Você deve criar testes unitários e/ou integrados.</li>
+            <li><input type="checkbox" checked/>&nbsp;Você deve criar um readme bem detalhado.</li>
+            <li><input type="checkbox" checked/>&nbsp;Você deve usar um dos grupos de tecnologias abaixo:</li>
+            NODE JS, Express JS, Sequelize JS, Postgre with Postgis, React js;<br/>
+            Java, Spring boot, Spring data, Postgre with Postgis, React js.<br/>
+            <li><input type="checkbox" checked/>&nbsp;Você deve publicar o código do projeto no seu github.</li>
+            <li><input type="checkbox" checked/>&nbsp;Você deve publicar o projeto em alguma cloud (Ex: AWS, HEROKU, etc) e nos enviar o link para que possamos testar seu sistema como usuários.</li>
+            <li><input type="checkbox" checked/>&nbsp;Você deve nos enviar um email antes de começar o desafio:<br/>
+            Email: cyan-dev@cyan-dev.com;<br/>
+            Título: FULLSTACK CHALLENGE :: Your_Name ;<br/>
+            Mensagem: Olá, estou iniciando o desafio.<br/>
+            </li>
+            </ul>
+            <h3>Avaliação</h3>
+            <h4>
+            O desafio deve ser enviado para "philipp.edson@cyan-agro.com" e "cyan-dev@cyan-dev.com.br" com o link para o repositório Github; Iremos julgar a arquitetura de seu serviço, a qualidade do código, a compreensão das regras de negócios e o grau de preparação deste serviço para implantação em um ambiente de produção. Após analisarmos seu desafio, entraremos em contato para agendar uma apresentação de seu desafio e uma entrevista com a equipe. Também discutiremos as decisões que você tomou. Acreditamos que 1 semana é um bom tempo para fazer o desafio, mas sabemos que nem todos têm o mesmo nível de disponibilidade. Avise-nos se precisar de mais tempo.<br/>
+            Sinta-se à vontade para nos contatar se tiver alguma dúvida através do email cyan-dev@cyan-dev.com.<br/>
+            Boa sorte!<br/>
+            Cyan devs<br/>
+            </h4>
+            </div>
+            
+            <div style="padding:20px;">
+            <h3>Notas da implementa&ccedil;&atilde;o</h3>
+            <h4>
+            <pre>
+O projeto foi executado com arquitetura de micro serviços e se divide em 4 partes ou diretorios principais: 
+
+-front-dev-main-react
+    é uma instancia de create-react-app, para construção do front-end em React
+-point-list-aws
+    é um servidor http que lida com pedidos para aws s3.
+-point-list-pg
+    é um servidor http que lida com pedidos para o postgresql 
+-point-list-router
+    é o servidor principal que roteia a porta 80 publica do serviço principal.
+
+foi escolhida a stack: NODE JS, Express JS, Sequelize JS, Postgre with Postgis, React js. utilizou-se a 
+biblioteca jquery-csv para a leitura de arquivos csv, pois foi considerada a que cobre mais a definição
+do formato csv.
+foi utilizado o bootstreap como biblioteca de formatação.
+foram implementados validadores do csv em termos de geolocalizacação tanto no front-end quanto no backend.
+O validador de csv permite que o csv tenha um header de texto indicando o nome das duas colunas,
+nao sao permitidos valores incompativeis com latitude e longitude.
+para a exibição dos maps utilizou-se o componente react-googlemaps que e' um wrapper da biblioteca do google maps.
+optou-se por não pagar pelo acesso ao google maps pois a versão de desenvolvimento e' util para fins de demonstração.
+foram implementadas InfoWindow para multiplos marcadores.
+
+para recuperação dos dados (download e exibição do arquivo), acessamos o s3 publicamente.
+para a listagem dos arquivos no s3 é necessário um acesso com chave armazenada em ~/.aws/credentials
+do servidor que hospedar o projeto point-list-aws.
+os servidores point-list-aws e point-list-pg devem estar em redes privadas pois não possuem autenticação 
+interna de serviço.
+é necessário habilitar o cors no bucket S3 e foi usado a seguinte politica.
+[
+    {
+        "AllowedHeaders": [
+            "*"
+        ],
+        "AllowedMethods": [
+            "GET"
+        ],
+        "AllowedOrigins": [
+            "*"
+        ],
+        "ExposeHeaders": [],
+        "MaxAgeSeconds": 3000
+    }
+]
+o bucket e a regiao utilizada no point-list-aws e' configuravel quando o serviço e' criado, por linha de comando,
+seguindo o esquema 'node index.js nome-do-bucket nome-da-regiao'
+optou-se por utilizar apenas um bucket para simplificar o processo de desenvolvimento visto que as
+chaves de bucket permitem utilizar nomes compostos de caminhos de arquivo.
+
+o esquema de gravaçao no banco foi simplificado, com uma tabela para armazenar o caminho e o id do mapa e
+uma tabela para armazenar os pontos em padrao postgis com tipo geometry(point). ao reescrever sobre
+um mesmo caminho as entradas sao substituidas nas duas tabelas.
+
+os seguintes arquivos devem ser configurados no deploy
+- front-dev-main-react/src/config.js
+- point-list-pg/config/config.js
+- point-list-router/config/config.js
+
+na versao testavel foi criada uma instância ec2 t2.medium ubuntu 64bits com 2 cpus, 4gb ram e 12gb de disco com portas ssh, http e https liberadas.
+foi instalada a ultima versao lts do node.
+
+
+wget https://nodejs.org/dist/v14.15.0/node-v14.15.0-linux-x64.tar.xz
+tar -xvf node-v14.15.0-linux-x64.tar.xz
+cd node-v14.15.0-linux-x64/
+cd bin
+sudo ln -s /home/ubuntu/node-v14.15.0-linux-x64/bin/node /usr/bin/node
+sudo ln -s /home/ubuntu/node-v14.15.0-linux-x64/bin/npx /usr/bin/npx
+sudo ln -s /home/ubuntu/node-v14.15.0-linux-x64/bin/npm /usr/bin/npm
+
+foi utilizada a versao padrao de postgresql e postgis do ubuntu
+
+sudo apt-get update
+sudo apt-get install postgresql
+sudo apt-get install postgis
+
+para habilitar o postgres e' necessario mudar o arquivo /etc/postgresql/12/main/pg_hba.conf
+com a tupla do postgres de peer para md5, trocar a senha do postgres no linux e alterar a senha dentro do banco 
+
+sudo passwd postgres
+sudo -i -u postgres
+psql
+CREATE EXTENSION Postgis;
+CREATE DATABASE cyan1;
+\c cyan1
+ALTER USER postgres WITH PASSWORD 'new_password';
+
+os serviços foram instalados todos na mesma maquina a partir do repositorio no github
+
+git clone https://github.com/NumberCooler/cyan-desafio.git
+cd cyan-desafio/
+cd front-dev-main-react/
+npm install
+npm run build
+cd ..
+cd point-list-aws/
+npm install
+cd ..
+cd point-list-pg/
+npm install
+cd ..
+cd point-list-router/
+npm install
+
+para executar os servicos continuamente na aws, usou-se o watchdog nohup com sudo.
+para o serviço aws foi necessario a flag -E para que encontra-se as credenciais em ~/.aws/credentials
+foi criado um grupo e um usuario com a politica de S3FullAcess na secao de administração de credenciais da AWS.
+as tabelas do banco sao automaticamente criadas na primeira execução de point-list-pg se a conexao estiver ok.
+
+Referencias
+https://cyan-agro.com/
+https://bitbucket.org/modclima/challenge/src/3e4308650ce107c38503c7188a9b89822d16c275/?at=challenge%2Fmid-level
+Common Format and MIME Type for Comma-Separated Values (CSV) Files
+https://tools.ietf.org/html/rfc4180 
+jQuery csv
+https://github.com/typeiii/jquery-csv
+pode retornar objetos mas nao pode retornar false em onParseValue, false e' reservado para nao adicionar.
+options.start e options.end e' o range de linhas para obter os valores.
+How to Integrate the Google Maps API into React Applications
+https://www.digitalocean.com/community/tutorials/how-to-integrate-the-google-maps-api-into-react-applications
+Repository of google-maps-react
+https://github.com/fullstackreact/google-maps-react
+Create-React-App Adding Bootstrap
+https://create-react-app.dev/docs/adding-bootstrap/
+https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/getting-started-nodejs.html
+https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html
+https://stackoverflow.com/questions/40127702/my-aws-cli-didnt-work-with-sudo
+            </pre>
+            </h4>
+            </div>
+    </body>
+</html>
